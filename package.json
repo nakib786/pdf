@@ -1,0 +1,41 @@
+{
+  "name": "pdfcraft",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "vercel-build": "next build"
+  },
+  "dependencies": {
+    "@ilovepdf/ilovepdf-nodejs": "^0.3.1",
+    "@types/form-data": "^2.2.1",
+    "@types/jsonwebtoken": "^9.0.10",
+    "axios": "^1.6.0",
+    "form-data": "^4.0.4",
+    "formidable": "^3.5.1",
+    "jsonwebtoken": "^9.0.2",
+    "next": "^14.0.0",
+    "pdf-lib": "^1.17.1",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0",
+    "react-dropzone": "^14.2.3"
+  },
+  "devDependencies": {
+    "@types/formidable": "^3.4.5",
+    "@types/node": "^20.0.0",
+    "@types/react": "^18.0.0",
+    "@types/react-dom": "^18.0.0",
+    "autoprefixer": "^10.4.0",
+    "eslint": "^8.0.0",
+    "eslint-config-next": "^14.0.0",
+    "postcss": "^8.4.0",
+    "tailwindcss": "^3.3.0",
+    "typescript": "^5.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
