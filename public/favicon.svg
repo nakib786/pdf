@@ -1,0 +1,43 @@
+<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background gradient circle -->
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#3B82F6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1E40AF;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="docGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#FFFFFF;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#F3F4F6;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background circle with gradient -->
+  <circle cx="16" cy="16" r="15" fill="url(#bgGradient)" stroke="#1E40AF" stroke-width="1.5"/>
+  
+  <!-- Document base with shadow -->
+  <rect x="8" y="6" width="12" height="16" rx="1.5" fill="url(#docGradient)" stroke="#374151" stroke-width="1"/>
+  
+  <!-- Document fold with gradient -->
+  <path d="M20 6L20 10L16 10L16 6H20Z" fill="#EF4444" stroke="#DC2626" stroke-width="0.5"/>
+  
+  <!-- PDF text lines with varying opacity -->
+  <rect x="10" y="12" width="8" height="1" rx="0.5" fill="#6B7280" opacity="0.8"/>
+  <rect x="10" y="14" width="6" height="1" rx="0.5" fill="#6B7280" opacity="0.6"/>
+  <rect x="10" y="16" width="7" height="1" rx="0.5" fill="#6B7280" opacity="0.7"/>
+  
+  <!-- PDF indicator bar -->
+  <rect x="10" y="18" width="8" height="2" rx="1" fill="#DC2626" opacity="0.8"/>
+  
+  <!-- Processing gear with better design -->
+  <circle cx="22" cy="22" r="4" fill="#10B981" stroke="#047857" stroke-width="1"/>
+  <path d="M22 18L22 19.5M22 24.5L22 26M26 22L24.5 22M19.5 22L18 22" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+  <circle cx="22" cy="22" r="1.5" fill="white"/>
+  
+  <!-- Small processing dots with animation-like positioning -->
+  <circle cx="24" cy="8" r="1.2" fill="#F59E0B"/>
+  <circle cx="26" cy="10" r="0.8" fill="#F59E0B" opacity="0.8"/>
+  <circle cx="25" cy="12" r="0.6" fill="#F59E0B" opacity="0.6"/>
+  
+  <!-- Subtle shine effect -->
+  <path d="M9 7L11 7L11 9L9 9Z" fill="white" opacity="0.3"/>
+</svg> 
