@@ -1,10 +1,11 @@
 import '../styles/globals.css';
 import type { AppProps } from 'next/app';
 import Head from 'next/head';
+import { DarkModeProvider } from '../components/DarkModeContext';
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
-    <>
+    <DarkModeProvider>
       <Head>
         <title>PDFCraft - PDF & Image Processing Suite</title>
         <meta name="description" content="Professional PDF and image processing tools. Merge, compress, split, rotate, and convert PDFs and images with ease." />
@@ -38,6 +39,6 @@ export default function App({ Component, pageProps }: AppProps) {
         <meta name="twitter:image" content="/favicon.svg" />
       </Head>
       <Component {...pageProps} />
-    </>
+    </DarkModeProvider>
   );
 }

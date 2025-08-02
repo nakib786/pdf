@@ -347,7 +347,7 @@ export default function FileUploader({ className = '' }: FileUploaderProps) {
       {/* Tool Selector */}
       <div className="mb-8">
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-2xl font-bold text-gray-900">Choose a Tool</h2>
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Choose a Tool</h2>
           <button
             onClick={() => setShowToolSelector(!showToolSelector)}
             className="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
@@ -364,16 +364,16 @@ export default function FileUploader({ className = '' }: FileUploaderProps) {
                 onClick={() => selectTool(tool)}
                 className={`p-4 border-2 rounded-lg text-left transition-colors ${
                   selectedTool?.id === tool.id
-                    ? 'border-primary-500 bg-primary-50'
-                    : 'border-gray-200 hover:border-primary-300 hover:bg-gray-50'
+                    ? 'border-primary-500 bg-primary-50 dark:bg-primary-900 text-gray-900 dark:text-white'
+                    : 'border-gray-200 dark:border-gray-600 hover:border-primary-300 hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-900 dark:text-white'
                 }`}
               >
                 <div className="flex items-center space-x-3">
                   <span className="text-2xl">{tool.icon}</span>
                   <div>
-                    <h3 className="font-semibold text-gray-900">{tool.name}</h3>
-                    <p className="text-sm text-gray-600">{tool.description}</p>
-                    <p className="text-xs text-gray-500 mt-1">
+                    <h3 className="font-semibold text-gray-900 dark:text-white">{tool.name}</h3>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">{tool.description}</p>
+                    <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
                       {tool.minFiles}-{tool.maxFiles} file(s)
                     </p>
                   </div>
@@ -384,13 +384,13 @@ export default function FileUploader({ className = '' }: FileUploaderProps) {
         )}
 
         {selectedTool && (
-          <div className="bg-primary-50 border border-primary-200 rounded-lg p-4">
+          <div className="bg-primary-50 dark:bg-gray-800 border border-primary-200 dark:border-gray-600 rounded-lg p-4">
             <div className="flex items-center space-x-3">
               <span className="text-2xl">{selectedTool.icon}</span>
               <div>
-                <h3 className="font-semibold text-gray-900">{selectedTool.name}</h3>
-                <p className="text-sm text-gray-600">{selectedTool.description}</p>
-                <p className="text-xs text-gray-500">
+                <h3 className="font-semibold text-gray-900 dark:text-white">{selectedTool.name}</h3>
+                <p className="text-sm text-gray-600 dark:text-gray-400">{selectedTool.description}</p>
+                <p className="text-xs text-gray-500 dark:text-gray-400">
                   Accepts: {selectedTool.accepts.map(type => type.split('/')[1]).join(', ')} | 
                   Files: {selectedTool.minFiles}-{selectedTool.maxFiles}
                 </p>
@@ -407,8 +407,8 @@ export default function FileUploader({ className = '' }: FileUploaderProps) {
           className={`
             border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-colors
             ${isDragActive 
-              ? 'border-primary-500 bg-primary-50' 
-              : 'border-gray-300 hover:border-primary-400'
+              ? 'border-primary-500 bg-primary-50 dark:bg-primary-900' 
+              : 'border-gray-300 dark:border-gray-600 hover:border-primary-400'
             }
           `}
         >
@@ -416,13 +416,13 @@ export default function FileUploader({ className = '' }: FileUploaderProps) {
           <div className="flex flex-col items-center space-y-4">
             <span className="text-4xl">{selectedTool.icon}</span>
             <div>
-              <p className="text-lg font-medium text-gray-700">
+              <p className="text-lg font-medium text-gray-700 dark:text-gray-300">
                 {isDragActive ? 'Drop your files here' : `Drag & drop files for ${selectedTool.name}`}
               </p>
-              <p className="text-sm text-gray-500 mt-2">
+              <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">
                 or <span className="text-primary-600 font-medium">browse files</span>
               </p>
-              <p className="text-xs text-gray-400 mt-1">
+              <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">
                 {selectedTool.accepts.map(type => type.split('/')[1]).join(', ')} files accepted
               </p>
             </div>
@@ -434,12 +434,12 @@ export default function FileUploader({ className = '' }: FileUploaderProps) {
       {files.length > 0 && (
         <div className="mt-6">
           <div className="flex justify-between items-center mb-4">
-            <h3 className="text-lg font-medium text-gray-900">
+            <h3 className="text-lg font-medium text-gray-900 dark:text-white">
               Selected Files ({files.length}/{selectedTool?.maxFiles})
             </h3>
             <button
               onClick={clearFiles}
-              className="text-sm text-red-600 hover:text-red-800 font-medium"
+              className="text-sm text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300 font-medium"
             >
               Clear All
             </button>
@@ -449,20 +449,20 @@ export default function FileUploader({ className = '' }: FileUploaderProps) {
             {files.map((file, index) => (
               <div
                 key={`${file.name}-${index}`}
-                className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
+                className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-lg"
               >
                 <div className="flex items-center space-x-3">
                   <span className="text-2xl">
                     {file.type.startsWith('image/') ? '🖼️' : '📄'}
                   </span>
                   <div>
-                    <p className="font-medium text-gray-900">{file.name}</p>
-                    <p className="text-sm text-gray-500">{formatFileSize(file.size)}</p>
+                    <p className="font-medium text-gray-900 dark:text-white">{file.name}</p>
+                    <p className="text-sm text-gray-500 dark:text-gray-400">{formatFileSize(file.size)}</p>
                   </div>
                 </div>
                 <button
                   onClick={() => removeFile(index)}
-                  className="text-red-500 hover:text-red-700 p-1"
+                  className="text-red-500 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 p-1"
                 >
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -476,8 +476,8 @@ export default function FileUploader({ className = '' }: FileUploaderProps) {
 
              {/* Rotation Preview for Rotate Tool */}
        {selectedTool?.id === 'rotate' && files.length > 0 && (
-         <div className="mt-6 p-4 bg-gray-50 rounded-lg border">
-           <h3 className="text-lg font-semibold mb-4 text-center">Choose Rotation Angle</h3>
+         <div className="mt-6 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600">
+           <h3 className="text-lg font-semibold mb-4 text-center text-gray-900 dark:text-white">Choose Rotation Angle</h3>
            <div className="flex justify-center space-x-4 mb-4">
              {[90, 180, 270].map((angle) => (
                <button
@@ -485,8 +485,8 @@ export default function FileUploader({ className = '' }: FileUploaderProps) {
                  onClick={() => setRotationAngle(angle)}
                  className={`px-4 py-2 rounded-lg border-2 transition-all ${
                    rotationAngle === angle
-                     ? 'border-primary-500 bg-primary-50 text-primary-700'
-                     : 'border-gray-300 bg-white text-gray-700 hover:border-gray-400'
+                     ? 'border-primary-500 bg-primary-50 dark:bg-primary-900 text-primary-700 dark:text-primary-300'
+                     : 'border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:border-gray-400 dark:hover:border-gray-500'
                  }`}
                >
                  <div className="flex flex-col items-center">
@@ -500,9 +500,9 @@ export default function FileUploader({ className = '' }: FileUploaderProps) {
                </button>
              ))}
            </div>
-           <div className="text-center text-sm text-gray-600">
+           <div className="text-center text-sm text-gray-600 dark:text-gray-400">
              <p>Selected: <strong>{rotationAngle}° clockwise</strong></p>
-             <p className="mt-1 text-amber-600">
+             <p className="mt-1 text-amber-600 dark:text-amber-400">
                <strong>Note:</strong> Currently using default 90° rotation. Custom angles coming soon!
              </p>
            </div>
@@ -518,7 +518,7 @@ export default function FileUploader({ className = '' }: FileUploaderProps) {
             className={`
               px-8 py-3 rounded-lg font-medium text-white transition-colors
               ${isProcessing || files.length < selectedTool.minFiles
-                ? 'bg-gray-400 cursor-not-allowed'
+                ? 'bg-gray-400 dark:bg-gray-600 cursor-not-allowed'
                 : 'bg-primary-600 hover:bg-primary-700 active:bg-primary-800'
               }
             `}
@@ -549,7 +549,7 @@ export default function FileUploader({ className = '' }: FileUploaderProps) {
 
       {/* Messages */}
       {error && (
-        <div className="mt-4 p-4 bg-red-50 border border-red-200 rounded-lg">
+        <div className="mt-4 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
           <div className="flex">
             <svg
               className="w-5 h-5 text-red-400"
@@ -564,13 +564,13 @@ export default function FileUploader({ className = '' }: FileUploaderProps) {
                 d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
               />
             </svg>
-            <p className="ml-3 text-sm text-red-800">{error}</p>
+            <p className="ml-3 text-sm text-red-800 dark:text-red-200">{error}</p>
           </div>
         </div>
       )}
 
       {success && (
-        <div className="mt-4 p-4 bg-green-50 border border-green-200 rounded-lg">
+        <div className="mt-4 p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg">
           <div className="flex">
             <svg
               className="w-5 h-5 text-green-400"
@@ -585,7 +585,7 @@ export default function FileUploader({ className = '' }: FileUploaderProps) {
                 d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
               />
             </svg>
-            <p className="ml-3 text-sm text-green-800">
+            <p className="ml-3 text-sm text-green-800 dark:text-green-200">
               Files processed successfully! Your download should start automatically.
             </p>
           </div>
@@ -594,9 +594,9 @@ export default function FileUploader({ className = '' }: FileUploaderProps) {
 
       {/* Instructions */}
       {!selectedTool && (
-        <div className="mt-8 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-          <h4 className="font-medium text-blue-900 mb-2">How to use:</h4>
-          <ul className="text-sm text-blue-800 space-y-1">
+        <div className="mt-8 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
+          <h4 className="font-medium text-blue-900 dark:text-blue-200 mb-2">How to use:</h4>
+          <ul className="text-sm text-blue-800 dark:text-blue-200 space-y-1">
             <li>1. Click "Show All Tools" to see available PDF and image processing tools</li>
             <li>2. Select the tool you want to use</li>
             <li>3. Upload your files by dragging them or clicking to browse</li>
