@@ -6,10 +6,10 @@ const nextConfig = {
   experimental: {
     serverComponentsExternalPackages: ['@ilovepdf/ilovepdf-nodejs']
   },
-  // Ensure proper handling of large files
+  // Increase the maximum request size for file uploads
   api: {
     bodyParser: {
-      sizeLimit: '10mb'
+      sizeLimit: '50mb'
     },
     responseLimit: false
   }

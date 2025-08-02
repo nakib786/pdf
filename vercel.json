@@ -9,15 +9,5 @@
     "pages/api/balance.ts": {
       "maxDuration": 30
     }
-  },
-  "env": {
-    "ILOVE_PUBLIC_KEY": "@ilove_public_key",
-    "ILOVE_SECRET_KEY": "@ilove_secret_key"
-  },
-  "build": {
-    "env": {
-      "ILOVE_PUBLIC_KEY": "@ilove_public_key",
-      "ILOVE_SECRET_KEY": "@ilove_secret_key"
-    }
   }
 } 

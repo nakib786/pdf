@@ -4,6 +4,12 @@ A comprehensive web application for PDF and image processing, built with Next.js
 
 ## 🚀 Features
 
+### File Size Limits
+- **Individual files**: Maximum 100MB per file
+- **Total upload size**: Maximum 500MB for all files combined
+- **Supported formats**: PDF, JPG, PNG, GIF, and other common image formats
+- **Real-time validation**: File size and format validation with visual progress indicators
+
 ### PDF Tools (17 tools)
 - **Merge PDF** - Combine multiple PDF files into one document
 - **Compress PDF** - Reduce PDF file size while maintaining quality
@@ -213,6 +219,12 @@ The application respects iLovePDF API limits:
    - Check the browser console for detailed error messages
    - Verify the selected tool supports your file type
    - Try with a smaller file to test
+
+4. **413 Request Entity Too Large Error**
+   - This error occurs when the total file size exceeds 500MB
+   - Solution: Reduce the number of files or use smaller files
+   - The application now includes real-time file size validation
+   - Visual progress indicators show upload progress and file size limits
 
 ### Debug Mode
 

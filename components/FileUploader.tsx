@@ -194,10 +194,30 @@ export default function FileUploader({ className = '' }: FileUploaderProps) {
   const [showToolSelector, setShowToolSelector] = useState(false);
   const [rotationAngle, setRotationAngle] = useState<number>(90);
   const [showRotationPreview, setShowRotationPreview] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState<number>(0);
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
     if (!selectedTool) {
       setError('Please select a tool first');
+      return;
+    }
+
+    // Check file sizes (100MB limit per file)
+    const MAX_FILE_SIZE = 100 * 1024 * 1024; // 100MB
+    const oversizedFiles = acceptedFiles.filter(file => file.size > MAX_FILE_SIZE);
+    
+    if (oversizedFiles.length > 0) {
+      setError(`Files too large: ${oversizedFiles.map(f => f.name).join(', ')}. Maximum file size is 100MB.`);
+      return;
+    }
+
+    // Check total size (500MB limit for all files)
+    const MAX_TOTAL_SIZE = 500 * 1024 * 1024; // 500MB
+    const currentTotalSize = files.reduce((sum, file) => sum + file.size, 0);
+    const newTotalSize = currentTotalSize + acceptedFiles.reduce((sum, file) => sum + file.size, 0);
+    
+    if (newTotalSize > MAX_TOTAL_SIZE) {
+      setError(`Total file size too large. Maximum total size is 500MB. Current: ${formatFileSize(currentTotalSize)}, Adding: ${formatFileSize(acceptedFiles.reduce((sum, file) => sum + file.size, 0))}`);
       return;
     }
 
@@ -226,7 +246,7 @@ export default function FileUploader({ className = '' }: FileUploaderProps) {
     accept: selectedTool ? Object.fromEntries(
       selectedTool.accepts.map(type => [type, [type.split('/')[1] === 'jpeg' ? '.jpg' : `.${type.split('/')[1]}`]])
     ) : {},
-    multiple: selectedTool?.maxFiles > 1
+    multiple: (selectedTool?.maxFiles || 1) > 1
   });
 
   const removeFile = (index: number) => {
@@ -268,6 +288,7 @@ export default function FileUploader({ className = '' }: FileUploaderProps) {
     setIsProcessing(true);
     setError(null);
     setSuccess(false);
+    setUploadProgress(0);
 
     try {
       console.log(`Frontend: Starting ${selectedTool.id} process...`);
@@ -293,6 +314,13 @@ export default function FileUploader({ className = '' }: FileUploaderProps) {
           'Content-Type': 'multipart/form-data',
         },
         responseType: 'blob',
+        timeout: 300000, // 5 minutes timeout for large file uploads
+        onUploadProgress: (progressEvent) => {
+          if (progressEvent.total) {
+            const progress = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+            setUploadProgress(progress);
+          }
+        },
       });
       console.log('Frontend: API call successful');
 
@@ -315,6 +343,12 @@ export default function FileUploader({ className = '' }: FileUploaderProps) {
       console.error('Frontend: Error response status:', error.response?.status);
       console.error('Frontend: Error response data:', error.response?.data);
       
+      // Handle specific HTTP errors
+      if (error.response?.status === 413) {
+        setError('Files too large. Please reduce file sizes or try processing fewer files at once. Maximum total size is 500MB.');
+        return;
+      }
+      
       if (error.response?.data) {
         try {
           const errorText = await error.response.data.text();
@@ -331,6 +365,7 @@ export default function FileUploader({ className = '' }: FileUploaderProps) {
       }
     } finally {
       setIsProcessing(false);
+      setUploadProgress(0);
     }
   };
 
@@ -425,8 +460,25 @@ export default function FileUploader({ className = '' }: FileUploaderProps) {
               <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">
                 {selectedTool.accepts.map(type => type.split('/')[1]).join(', ')} files accepted
               </p>
+              <p className="text-xs text-gray-400 dark:text-gray-500">
+                Max 100MB per file, 500MB total
+              </p>
             </div>
           </div>
+          
+          {/* File size warning */}
+          {files.reduce((sum, file) => sum + file.size, 0) > 400 * 1024 * 1024 && (
+            <div className="mt-3 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
+              <div className="flex items-center space-x-2">
+                <svg className="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
+                </svg>
+                <p className="text-sm text-red-700 dark:text-red-300">
+                  Warning: Total file size is approaching the 500MB limit. Consider processing fewer files at once.
+                </p>
+              </div>
+            </div>
+          )}
         </div>
       )}
 
@@ -434,9 +486,30 @@ export default function FileUploader({ className = '' }: FileUploaderProps) {
       {files.length > 0 && (
         <div className="mt-6">
           <div className="flex justify-between items-center mb-4">
-            <h3 className="text-lg font-medium text-gray-900 dark:text-white">
-              Selected Files ({files.length}/{selectedTool?.maxFiles})
-            </h3>
+            <div>
+              <h3 className="text-lg font-medium text-gray-900 dark:text-white">
+                Selected Files ({files.length}/{selectedTool?.maxFiles})
+              </h3>
+              <div className="flex items-center space-x-2">
+                <p className="text-sm text-gray-500 dark:text-gray-400">
+                  Total size: {formatFileSize(files.reduce((sum, file) => sum + file.size, 0))} / 500MB
+                </p>
+                <div className="w-24 h-2 bg-gray-200 dark:bg-gray-600 rounded-full overflow-hidden">
+                  <div 
+                    className={`h-full rounded-full transition-all ${
+                      files.reduce((sum, file) => sum + file.size, 0) > 400 * 1024 * 1024 
+                        ? 'bg-red-500' 
+                        : files.reduce((sum, file) => sum + file.size, 0) > 300 * 1024 * 1024 
+                        ? 'bg-yellow-500' 
+                        : 'bg-green-500'
+                    }`}
+                    style={{ 
+                      width: `${Math.min(100, (files.reduce((sum, file) => sum + file.size, 0) / (500 * 1024 * 1024)) * 100)}%` 
+                    }}
+                  />
+                </div>
+              </div>
+            </div>
             <button
               onClick={clearFiles}
               className="text-sm text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300 font-medium"
@@ -511,12 +584,12 @@ export default function FileUploader({ className = '' }: FileUploaderProps) {
 
        {/* Action Buttons */}
        {selectedTool && files.length > 0 && (
-          <div className="mt-6 flex justify-center">
+          <div className="mt-6">
             <button
             onClick={processFiles}
             disabled={isProcessing || files.length < selectedTool.minFiles}
             className={`
-              px-8 py-3 rounded-lg font-medium text-white transition-colors
+              w-full px-8 py-3 rounded-lg font-medium text-white transition-colors
               ${isProcessing || files.length < selectedTool.minFiles
                 ? 'bg-gray-400 dark:bg-gray-600 cursor-not-allowed'
                 : 'bg-primary-600 hover:bg-primary-700 active:bg-primary-800'
@@ -544,6 +617,22 @@ export default function FileUploader({ className = '' }: FileUploaderProps) {
               `Process with ${selectedTool.name}`
             )}
           </button>
+          
+          {/* Upload Progress */}
+          {isProcessing && uploadProgress > 0 && (
+            <div className="mt-4">
+              <div className="flex justify-between text-sm text-gray-600 dark:text-gray-400 mb-1">
+                <span>Uploading files...</span>
+                <span>{uploadProgress}%</span>
+              </div>
+              <div className="w-full h-2 bg-gray-200 dark:bg-gray-600 rounded-full overflow-hidden">
+                <div 
+                  className="h-full bg-primary-600 rounded-full transition-all duration-300"
+                  style={{ width: `${uploadProgress}%` }}
+                />
+              </div>
+            </div>
+          )}
         </div>
       )}
 
